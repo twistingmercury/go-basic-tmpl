@@ -1,4 +1,4 @@
-# Package: server
+# How to use and update the server package
 
 The `server` package is responsible for initializing and starting the application server. It sets up the necessary components, such as logging, tracing, and metrics, and starts the server along with a heartbeat endpoint for health monitoring.
 

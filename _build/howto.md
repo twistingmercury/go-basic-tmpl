@@ -1,4 +1,4 @@
-# Build Scripts
+# How to use and update the build scripts
 
 This directory contains two shell scripts, `build.sh` and `common.sh`, which are used to build the Docker image for the Go application.
 
