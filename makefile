@@ -16,7 +16,7 @@ ifeq ($(shell git rev-parse --is-inside-work-tree 2>/dev/null),true)
   ifdef TAG
     BUILD_VER := $(shell echo $(TAG) | sed 's/v//')
   else
-    BUILD_VER := unknown
+    BUILD_VER := "0.0.0"
   endif
   GIT_COMMIT := $(shell git rev-parse --short HEAD)pwd
 endif

@@ -20,7 +20,7 @@ checkEnv "$TARGET" "TARGET"
 printf "\n** Changing directory to '%s'\n" "$DOCKERFILE_DIR"
 cd "$DOCKERFILE_DIR"
 
-printf "\n** Building Docker image for '%s' with version '%s'\n" "$BIN_NAME" "$BUILD_VER"
+printf "\n** Building Docker image for '%s' with version '%s'\n" "{{bin_name}}" "$BUILD_VER"
 docker build --force-rm \
 	--build-arg BUILD_DATE="$BUILD_DATE" \
 	--build-arg BUILD_VER="$BUILD_VER" \
@@ -28,6 +28,6 @@ docker build --force-rm \
 	--build-arg ALPINE_VERSION="$ALPINE_VERSION" \
 	--build-arg GO_VERSION="$GO_VERSION" \
 	--build-arg TARGET="$TARGET" \
-	-t "$BIN_NAME":"$BUILD_VER" -f dockerfile .
+	-t "{{bin_name}}":"$BUILD_VER" -f dockerfile .
 
 docker system prune -f
