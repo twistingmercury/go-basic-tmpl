@@ -1,13 +1,13 @@
 BIN_DIR := "./_bin/"
-BIN_NAME := "goTmpl" #"{{bin_name}}"
-BUILD_DATE := $(shell date +"%Y-%m-%dT%H:%M:%S")
+BIN_NAME := "{{bin_name}}"
+BUILD_DATE := $(shell date +"%Y-%m-%d")
 BUILD_VER := "n/a"
 GIT_COMMIT := "n/a"
-MODULE_NAME :=  "github.com/twistingmercury/tmpl" #"{{module_name}}"
+MODULE_NAME :=  "{{module_name}}"
 ALPINE_VERSION := "3.19"
 GO_VERSION := "1.21.9"
-DESCRIPTION:= "my description"  #"{{description}}"
-VENDOR:= "Widgets and More"  #"{{vendor_name}}"
+DESCRIPTION:= "{{description}}"
+VENDOR:= "{{vendor_name}}"
 
 
 ifeq ($(shell git rev-parse --is-inside-work-tree 2>/dev/null),true)

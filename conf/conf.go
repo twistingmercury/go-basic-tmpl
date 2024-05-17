@@ -3,6 +3,7 @@ package conf
 import (
 	"fmt"
 	"os"
+
 	"github.com/rs/zerolog"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
@@ -54,7 +55,7 @@ var (
 	buildVer    = "n/a"
 	buildDate   = "n/a"
 	buildCommit = "n/a"
-	serviceName = "{{service_name}}"
+	serviceName = "{{bin_name}}"
 )
 
 var (
@@ -87,7 +88,6 @@ func Initialize() {
 	viper.SetDefault(ViperLogLevelKey, DefaultLogLevel.String())
 	viper.SetDefault(ViperTraceSampleRateKey, DefaultTraceSampleRate)
 }
-
 
 // ShowVersion prints the version information and exits the program.
 func ShowVersion() {

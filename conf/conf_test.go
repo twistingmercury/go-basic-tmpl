@@ -1,13 +1,15 @@
 package conf_test
 
 import (
-	"github.com/spf13/viper"
-	"github.com/stretchr/testify/require"
 	"os"
 	"testing"
 
+	"github.com/spf13/viper"
+	"github.com/stretchr/testify/require"
+
+	"{{module_name}}/conf"
+
 	"github.com/stretchr/testify/assert"
-	"github.com/twistingmercury/tmpl/conf"
 )
 
 const (
@@ -54,4 +56,3 @@ func TestEnvVars(t *testing.T) {
 	assert.Equal(t, ep, viper.GetString(conf.ViperOtelAddrKey))
 	assert.Equal(t, "info", viper.GetString(conf.ViperLogLevelKey))
 }
-

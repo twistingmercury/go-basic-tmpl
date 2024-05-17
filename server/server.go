@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 
+	"{{module_name}}/conf"
+
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog"
 	"github.com/spf13/viper"
@@ -13,7 +15,6 @@ import (
 	"github.com/twistingmercury/telemetry/logging"
 	"github.com/twistingmercury/telemetry/metrics"
 	"github.com/twistingmercury/telemetry/tracing"
-	"github.com/twistingmercury/tmpl/conf"
 	"github.com/twistingmercury/utils"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc"
@@ -30,7 +31,7 @@ func Bootstrap(context context.Context) error {
 	conf.Initialize()
 	conf.ShowVersion()
 	conf.ShowHelp()
-	
+
 	ctx = context
 	attribs = attributes.New(
 		viper.GetString(conf.ViperNamespaceKey),

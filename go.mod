@@ -1,4 +1,4 @@
-module github.com/twistingmercury/tmpl
+module {{module_name}}
 
 go 1.21.1
 

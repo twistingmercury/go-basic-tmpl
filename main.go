@@ -4,7 +4,8 @@ import (
 	"context"
 	"log"
 
-	"github.com/twistingmercury/tmpl/server"
+	"{{module_name}}/server"
+
 	"github.com/twistingmercury/utils"
 )
 
