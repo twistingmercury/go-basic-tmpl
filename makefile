@@ -24,7 +24,7 @@ default: help
 
 .PHONY: help
 help:
-	@echo "\nTunnelVision makefile usage: make [target]"
+	@echo "\{{bin_name}} makefile usage: make [target]"
 	@echo "  Targets:"
 	@echo "  » clean           Remove build artifacts"
 	@echo "  » build           Build the api binary"
@@ -47,12 +47,12 @@ build: clean
 
 .PHONY: test
 test:
-	go test -v ./conf ./api -coverprofile=coverage.out
+	go test -v ./conf ./server -coverprofile=coverage.out
 	go tool cover -html=coverage.out
 
 .PHONY: run
 run:
-	GIN_MODE=release go run main.go
+	go run main.go
 
 # I have to open a new terminal to run this command
 .PHONY: test-heartbeat
@@ -64,11 +64,7 @@ image:
 	BUILD_DATE="$(BUILD_DATE)" \
 	BUILD_VER="$(BUILD_VER)" \
 	GIT_COMMIT="$(GIT_COMMIT)" \
-	BIN_NAME="$(BIN_NAME)" \
-	MODULE_NAME="$(MODULE_NAME)" \
 	DOCKERFILE_DIR="$(PWD)" \
 	ALPINE_VERSION="$(ALPINE_VERSION)" \
 	GO_VERSION="$(GO_VERSION)" \
-	DESCRIPTION="$(DESCRIPTION)" \
-	VENDOR="$(VENDOR)" \
 	./_build/build.sh
