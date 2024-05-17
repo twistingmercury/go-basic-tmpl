@@ -8,6 +8,7 @@ ALPINE_VERSION := "3.19"
 GO_VERSION := "1.21.9"
 DESCRIPTION:= "{{description}}"
 VENDOR:= "{{vendor_name}}"
+TARGET:= "main.go"
 
 
 ifeq ($(shell git rev-parse --is-inside-work-tree 2>/dev/null),true)
@@ -43,7 +44,7 @@ build: clean
 	-ldflags "-X '$(MODULE_NAME)/cmd/conf.buildDate=$(BUILD_DATE)' \
 	-X '$(MODULE_NAME)/cmd/conf.buildVer=$(BUILD_VER)' \
 	-X '$(MODULE_NAME)/cmd/conf.buildCommit=$(GIT_COMMIT)' -s -w" \
-	-o $(BIN_DIR)$(BIN_NAME) ./main.go
+	-o $(BIN_DIR)$(BIN_NAME) $(TARGET)
 
 .PHONY: test
 test:
@@ -67,4 +68,5 @@ image:
 	DOCKERFILE_DIR="$(PWD)" \
 	ALPINE_VERSION="$(ALPINE_VERSION)" \
 	GO_VERSION="$(GO_VERSION)" \
+	TARGET="$(TARGET)" \
 	./_build/build.sh

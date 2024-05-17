@@ -26,7 +26,7 @@ var (
 	attribs attributes.Attributes
 )
 
-// Bootstrap initializes the application's telemetry components, logging, tracing, and metrics.'
+// Bootstrap initializes the application's telemetry components, logging, tracing, and metrics.
 func Bootstrap(context context.Context) error {
 	conf.Initialize()
 	conf.ShowVersion()
@@ -115,7 +115,7 @@ func checkDeps() []heartbeat.DependencyDescriptor {
 			HandlerFunc: func() heartbeat.StatusResult {
 				hsr := heartbeat.StatusResult{Status: heartbeat.StatusNotSet, Message: "unknown"}
 				// for a REST apo, you'd create a func that checks if the REST api is reachable,
-				// perhaps invoking it's own health endpoint (if it has one).
+				// perhaps invoking its health endpoint (if it has one).
 				return hsr
 			},
 		},
