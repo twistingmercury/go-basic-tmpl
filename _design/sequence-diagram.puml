@@ -1,0 +1,30 @@
+' This is a sample sequence diagram
+@startuml service sequence diagram 
+title  "Service Sequence Diagram"
+autonumber
+
+participant "Client" as c
+boundary "gRPC API" as a
+queue "Message Broker" as b
+boundary "Worker Process" as w
+database "Data Storage" as d
+
+c -> a ++: insert request
+a -> b ++: publish
+b --> a: ack
+deactivate b
+
+a --> c: 202 accepted
+deactivate a
+
+w -> b ++: consume
+w -> d ++: insert
+d --> w: result
+deactivate d
+
+w --> b: ack/nack
+deactivate b
+
+ 
+
+@enduml

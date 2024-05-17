@@ -1,0 +1,17 @@
+' This is a sample block diagram
+@startuml {{service_name}} block diagram
+title "{{service_name}} block diagram"
+skinparam linetype ortho
+
+card request <<post>> as request
+component "http server" <<concurrent routine>> as httpsvr
+process channel  <<tunneldata>> as channel
+component "processData"  <<concurrent routine>> as processData
+file "stderr" as terminal
+
+request -> httpsvr
+httpsvr -> channel
+channel -> processData
+processData -> terminal
+
+@enduml
