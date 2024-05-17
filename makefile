@@ -27,19 +27,19 @@ default: help
 help:
 	@echo "\{{bin_name}} makefile usage: make [target]"
 	@echo "  Targets:"
-	@echo "  » clean           Remove build artifacts"
-	@echo "  » build           Build the api binary"
-	@echo "  » test            Run all unit tests"
-	@echo "  » image           Build the Docker image"
-	@echo "  » run             Run the main.go file"
+	@echo "  » clean           Remove build artifacts and clean up the project"
+	@echo "  » bin             Build the binary and output to _bin/ directory"
+	@echo "  » test            Run all unit tests and generate coverage report"
+	@echo "  » image           Build the docker image with using a multi-stage build"
+	@echo "  » run             Run the main.go file to start the server"
 	@echo "  » test-heartbeat  Test the heartbeat endpoint using cURL\n"
 
 .PHONY: clean
 clean:
 	@rm -rf $(BIN_DIR) > /dev/null 2>&1
 
-.PHONY: build
-build: clean
+.PHONY: bin
+bin: clean
 	go build \
 	-ldflags "-X '$(MODULE_NAME)/cmd/conf.buildDate=$(BUILD_DATE)' \
 	-X '$(MODULE_NAME)/cmd/conf.buildVer=$(BUILD_VER)' \
@@ -55,7 +55,6 @@ test:
 run:
 	go run main.go
 
-# I have to open a new terminal to run this command
 .PHONY: test-heartbeat
 test-heartbeat:
 	curl -X GET -H "Content-Type: application/json" http://localhost:8081/heartbeat
