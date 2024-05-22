@@ -1,7 +1,7 @@
 BIN_DIR := "./_bin/"
 BIN_NAME := "{{bin_name}}"
 BUILD_DATE := $(shell date +"%Y-%m-%d")
-BUILD_VER := "n/a"
+BUILD_VER := ""
 GIT_COMMIT := "n/a"
 MODULE_NAME :=  "{{module_name}}"
 ALPINE_VERSION := "3.19"
@@ -12,12 +12,6 @@ TARGET:= "main.go"
 
 
 ifeq ($(shell git rev-parse --is-inside-work-tree 2>/dev/null),true)
-  TAG := $(shell git describe --tags --abbrev=0 --match='v[0-9]*.[0-9]*.[0-9]*' 2>/dev/null)
-  ifdef TAG
-    BUILD_VER := $(shell echo $(TAG) | sed 's/v//')
-  else
-    BUILD_VER := "0.0.0"
-  endif
   GIT_COMMIT := $(shell git rev-parse --short HEAD)pwd
 endif
 
@@ -32,7 +26,6 @@ help:
 	@echo "  » test            Run all unit tests and generate coverage report"
 	@echo "  » image           Build the docker image with using a multi-stage build"
 	@echo "  » run             Run the main.go file to start the server"
-	@echo "  » test-heartbeat  Test the heartbeat endpoint using cURL\n"
 
 .PHONY: clean
 clean:
@@ -54,10 +47,6 @@ test:
 .PHONY: run
 run:
 	go run main.go
-
-.PHONY: test-heartbeat
-test-heartbeat:
-	curl -X GET -H "Content-Type: application/json" http://localhost:8081/heartbeat
 
 .PHONY: image
 image:

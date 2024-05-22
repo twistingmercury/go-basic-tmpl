@@ -1,6 +1,6 @@
 # How to use and update the conf package.
 
-The `conf` package is responsible for handling the configuration of the Go application. It uses the `viper` package for configuration management and the `pflag` package for command-line flag parsing.
+The `conf` package is responsible for handling the configuration of the Go application. It uses the [viper]() package for configuration management and the `pflag` package for command-line flag parsing.
 
 ## Configuration Keys
 

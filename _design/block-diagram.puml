@@ -3,15 +3,15 @@
 title "{{service_name}} block diagram"
 skinparam linetype ortho
 
-card request <<post>> as request
-component "http server" <<concurrent routine>> as httpsvr
-process channel  <<tunneldata>> as channel
-component "processData"  <<concurrent routine>> as processData
-file "stderr" as terminal
+card request <<gRPC>> as request
+node "API server"  as server
+queue "msg queue" as queue
+node "processData" <<worker process>> as worker
+database "storage" as database
 
-request -> httpsvr
-httpsvr -> channel
-channel -> processData
-processData -> terminal
+request -> server
+server -> queue
+queue -> worker
+worker -> database
 
 @enduml

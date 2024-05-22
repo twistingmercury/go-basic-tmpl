@@ -1,30 +1,22 @@
-checkEnv() {
-    if [ -z "$1" ]; then
-        printf "** env var %s is not assigned\n" "$2"
-        help
+#!/usr/bin/env bash
+
+function common::checkenv() {
+    if [ -z "${!1}" ]; then
+        printf "** Error: $1 must be defined\n"
+        common::help
+        exit 1
     fi
 }
 
-help() {
-    echo "\nHow to use build.sh:"
-    echo '  BUILD_DATE="$(BUILD_DATE)" \'
-	echo '  BUILD_VER="$(BUILD_VER)" \'
-	echo '  GIT_COMMIT="$(GIT_COMMIT)" \'
-	echo '  DOCKERFILE_DIR="$(PWD)" \'
-	echo '  ALPINE_VERSION="$(ALPINE_VERSION)" \'
-	echo '  GO_VERSION="$(GO_VERSION)" \'
-	echo '  DESCRIPTION="$(DESCRIPTION)" \'
-	echo '  VENDOR="$(VENDOR)" \'
-	echo '  ./_build/build.sh'
+function common::help() {
+    echo "Usage:"
+    echo "  BUILD_DATE=<BUILD_DATE> \\n  BUILD_VER=<BUILD_VER> \\n  GIT_COMMIT=<GIT_COMMIT> \\n  BIN_NAME=<BIN_NAME> \\n  MODULE_NAME=<MODULE_NAME> \\n  DOCKERFILE_DIR=<DOCKERFILE_DIR> \\n  ./build/build-image.sh"
     echo "\nEnvironment variables:"
     echo "  BUILD_DATE:     The build date of the binary"
-    echo "  BUILD_VER:      The build semantic version (if a release candidate) of the binary."
-    echo "  GIT_COMMIT:     The short commit hash of the commit being used for the build."
-    echo "  DOCKERFILE_DIR: The directory containing the target dockerfile."
-    echo "  ALPINE_VERSION: The version of the alpine image to use."
-    echo "  GO_VERSION:     The version of the go image to use, as available in the Alpine go images."
-    echo "  DESCRIPTION:    The description of the binary to be used in the Dockerfile."
-    echo "  VENDOR:         The vendor of the binary."
-    echo "  TARGET:         The file that will be targeted for the build, e.g., main.go."
+    echo "  BUILD_VER:      The build semantic version (if a release candidate) of the binary"
+    echo "  GIT_COMMIT:     The short commit hash of the commit being used for the build"
+    echo "  BIN_NAME:       The binary name as well as the name of the process to be executed in the ENTRYPOINT"
+    echo "  MODULE_NAME:    The module name as defined in go.mod"
+    echo "  DOCKERFILE_DIR: The directory containing the target dockerfile"
     exit 1
 }

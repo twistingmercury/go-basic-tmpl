@@ -4,10 +4,10 @@ This is a template for creating Go projects with a focus on observability, conta
 
 ## Features
 
-- Structured logging using the [`zerolog`]() package
+- Structured logging using the [zerolog](https://pkg.go.dev/github.com/rs/zerolog) package
 - Tracing with OpenTelemetry and OTLP exporter
 - Metrics collection with OpenTelemetry and OTLP exporter
-- Configuration management using the [`viper`]() package
+- Configuration management using the [viper](https://pkg.go.dev/github.com/spf13/viper) package
 - Health monitoring with a heartbeat endpoint
 - Dockerfile for containerization
 - Shell scripts for building the application
@@ -19,7 +19,7 @@ To create a new Go project using this template, you'll need to use the [scaffold
 
 Since this is a template, understand that cloning this project directly and attempting to compile it will fail. This is due to the replacement tokens scattered throughout the template:
 
-- `{{module_name}}` This is the name of the module, as declared in the go.mod file
+- `{{module_name}}` This is the name of the module, as declared in the go.mod file, i.e., `github.com/your-name/your-project`
 - `{{bin_name}}`    This will be the name of the compiled binary, the name of the root folder, and the name of the docker image.
 - `{{vendor_name}}` This is the name of the vendor to be added to the `org.opencontainers.image.vendor` label in the docker image.
 - `{{description}}` this is a description of the app to be added to the `org.opencontainers.image.description` label in the docker image.

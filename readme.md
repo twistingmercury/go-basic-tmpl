@@ -1,8 +1,6 @@
 # Project {{bin_name}}
 
-A brief description of your Go project goes here. Explain what your project does, its purpose, and any key features or benefits. 
-
-Feel free to customize this template based on your project's specific needs. Add or remove sections as necessary, and provide detailed information to help users understand and use your Go project effectively.
+_**TODO**: A brief description of your Go project goes here. Explain what your project does, its purpose, and any key features or benefits. Feel free to customize this template based on your project's specific needs. Add or remove sections as necessary, and provide detailed information to help users understand and use your Go project effectively._
 
 ## Table of Contents
 
@@ -17,11 +15,11 @@ Feel free to customize this template based on your project's specific needs. Add
 
 ## Installation
 
-Provide instructions on how to install and set up your Go project. Include any dependencies that need to be installed and the steps to get the project running.
+_**TODO**:Provide instructions on how to install and set up your Go project. Include any dependencies that need to be installed and the steps to get the project running._
 
 ```bash
 # Clone the repository
-git clone https://github.com/username/{{bin_name}}.git
+git clone {{module}}.git
 
 # Change to the project directory
 cd {{bin_name}}
@@ -35,7 +33,7 @@ go build
 
 ## Usage
 
-Explain how to use your Go project. Provide examples, command-line interfaces, or API endpoints that users can interact with. Include any important notes or considerations.
+_**TODO**: Explain how to use your Go project. Provide examples, command-line interfaces, or API endpoints that users can interact with. Include any important notes or considerations._
 
 ```bash
 # Run the project
@@ -47,7 +45,7 @@ Explain how to use your Go project. Provide examples, command-line interfaces, o
 
 ## Configuration
 
-If your project requires any configuration, describe how to configure it here. Provide examples of configuration files or environment variables that need to be set.
+_**TODO**: If your project requires any configuration, describe how to configure it here. Provide examples of configuration files or environment variables that need to be set._
 
 ```yaml
 # config.yaml
