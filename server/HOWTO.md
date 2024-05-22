@@ -62,7 +62,6 @@ func Bootstrap(ctx context.Context) error {
     // ...
 }
 ```
-
 4. Make sure to handle any errors that may occur during the initialization process and return them from the `Bootstrap` function.
 
 ### Extending the Start Function
@@ -72,7 +71,6 @@ func Bootstrap(ctx context.Context) error {
 2. Locate the `Start` function.
 
 3. Add any additional server initialization steps or start additional services within the function. For example, you can start gRPC servers, background workers, or periodic tasks.
-
 ```go
 func Start() {
     // ...
@@ -89,7 +87,6 @@ func Start() {
     // ...
 }
 ```
-
 4. Make sure to handle any errors that may occur during the startup process and log them appropriately.
 
 ### Adding Dependencies

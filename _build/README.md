@@ -69,16 +69,16 @@ If you need to add additional environment variables to customize the build proce
 2. Locate the section where the existing environment variables are checked using the `checkEnv` function, e.g.:
 
 ```bash
-checkEnv "$BUILD_DATE" "BUILD_DATE"
-checkEnv "$BUILD_VER" "BUILD_VER"
-checkEnv "$GIT_COMMIT" "GIT_COMMIT"
+common::checkEnv "BUILD_DATE"
+common::checkEnv "BUILD_VER"
+common::checkEnv "GIT_COMMIT"
 # ...
 ```
 
 3. Add a new line for each environment variable you want to add, following the same format:
 
 ```bash
-checkEnv "$YOUR_NEW_ENV_VAR" "YOUR_NEW_ENV_VAR"
+common::checkEnv "YOUR_NEW_ENV_VAR"
 ```
 
 Replace `YOUR_NEW_ENV_VAR` with the name of your new environment variable.

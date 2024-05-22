@@ -3,7 +3,7 @@
 title  "Service Sequence Diagram"
 autonumber
 
-participant "Client" as c
+participant "gRPC Client" as c
 boundary "gRPC API" as a
 queue "Message Broker" as b
 boundary "Worker Process" as w
