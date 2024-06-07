@@ -1,25 +1,40 @@
 package server_test
 
 import (
+	"MODULE_NAME/conf"
 	"context"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
-
-	"{{module_name}}/server"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
+	"github.com/twistingmercury/heartbeat"
+
+	"MODULE_NAME/server"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/twistingmercury/heartbeat"
 )
 
+const (
+	svcName    = "test"
+	svcVersion = "0.0.0"
+	nspace     = "unit"
+	environ    = "unittesting"
+)
+
+func init() {
+	viper.Set(conf.ViperTraceSampleRateKey, conf.DefaultTraceSampleRate)
+}
 func TestBootstrap(t *testing.T) {
 	// Create a new context
 	ctx := context.Background()
 
 	// Call the Bootstrap function
-	err := server.Bootstrap(ctx)
+	err := server.Bootstrap(ctx, svcName, svcVersion, nspace, environ)
 
 	// Assert that no error occurred
 	assert.NoError(t, err)
@@ -31,11 +46,16 @@ func TestStart(t *testing.T) {
 	defer cancel()
 
 	// Call the Bootstrap function
-	err := server.Bootstrap(ctx)
+	err := server.Bootstrap(ctx, svcName, svcVersion, nspace, environ)
 	require.NoError(t, err)
 
 	// Start the server in a goroutine
 	go server.Start()
+
+	time.Sleep(1 * time.Second)
+	cancel()
+	err = server.Stop()
+	require.NoError(t, err)
 
 	// Perform any necessary assertions or checks
 	// ...
@@ -47,10 +67,13 @@ func TestStart(t *testing.T) {
 func TestStartHeartbeat(t *testing.T) {
 	// Create a new context
 	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
+	defer func() {
+		cancel()
+		time.Sleep(2 * time.Second)
+	}()
 
 	// Start the heartbeat endpoint in a goroutine
-	go server.StartHeartbeat(ctx)
+	server.StartHeartbeat(ctx)
 
 	// Create a new HTTP request for the heartbeat endpoint
 	req, err := http.NewRequest("GET", "/heartbeat", nil)
@@ -68,8 +91,15 @@ func TestStartHeartbeat(t *testing.T) {
 	assert.Equal(t, http.StatusOK, resp.Code)
 
 	// Assert the response body
-	expectedBody := `{"status":"OK","dependencies":[{"name":"desc 01","type":"http/rest","status":"NOT_SET","message":"unknown","timestamp":""},{"name":"desc 02","type":"database","status":"NOT_SET","message":"unknown","timestamp":""}],"timestamp":""}`
-	assert.JSONEq(t, expectedBody, resp.Body.String())
+	body, err := io.ReadAll(resp.Body)
+	require.NoError(t, err)
+
+	result := string(body)
+	expectedKeys := []string{"status", "request_duration_ms", "resource", "utc_DateTime", "dependencies"}
+
+	for _, key := range expectedKeys {
+		assert.Contains(t, result, key)
+	}
 }
 
 func TestCheckDeps(t *testing.T) {

@@ -2,71 +2,54 @@ package server
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"net/http"
 	"os"
-
-	"{{module_name}}/conf"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/twistingmercury/heartbeat"
+
+	"MODULE_NAME/conf"
+
 	"github.com/rs/zerolog"
 	"github.com/spf13/viper"
-	"github.com/twistingmercury/heartbeat"
-	"github.com/twistingmercury/telemetry/attributes"
 	"github.com/twistingmercury/telemetry/logging"
 	"github.com/twistingmercury/telemetry/metrics"
 	"github.com/twistingmercury/telemetry/tracing"
-	"github.com/twistingmercury/utils"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
 )
 
 var (
-	ctx     context.Context
-	attribs attributes.Attributes
+	ctx   context.Context
+	hbsvr *http.Server
 )
 
 // Bootstrap initializes the application's telemetry components, logging, tracing, and metrics.
-func Bootstrap(context context.Context) error {
-	conf.Initialize()
+func Bootstrap(context context.Context, svcName, svcVersion, namespace, environment string) error {
 	conf.ShowVersion()
 	conf.ShowHelp()
 
-	ctx = context
-	attribs = attributes.New(
-		viper.GetString(conf.ViperNamespaceKey),
-		viper.GetString(conf.ViperServiceNameKey),
-		viper.GetString(conf.ViperBuildVersionKey),
-		viper.GetString(conf.ViperEnviormentKey),
-		attribute.String("commit", viper.GetString(conf.ViperCommitHashKey)),
-	)
-
-	logging.Info("initializing logging")
 	logLevel, err := zerolog.ParseLevel(viper.GetString(conf.ViperLogLevelKey))
+	err = logging.Initialize(logLevel, os.Stdout, svcName, svcVersion, environment)
 	if err != nil {
 		return err
 	}
-	err = logging.Initialize(logLevel, attribs, os.Stdout)
-	if err != nil {
-		return err
-	}
+	ctx = context
 
 	logging.Info("initializing tracing")
 	texporter, err := otlptracegrpc.New(ctx)
 	if err != nil {
 		return err
 	}
-	err = tracing.Initialize(texporter, viper.GetFloat64(conf.ViperTraceSampleRateKey), attribs)
+	err = tracing.InitializeWithSampleRate(texporter, viper.GetFloat64(conf.ViperTraceSampleRateKey), svcName, svcVersion, namespace)
 	if err != nil {
 		return err
 	}
 
 	logging.Info("initializing metrics")
-	mexexporter, err := otlpmetricgrpc.New(ctx)
-	if err != nil {
-		return err
-	}
-	return metrics.Initialize(mexexporter, attribs)
+	return metrics.Initialize(namespace, svcName)
 }
 
 // Start initializes the application's API service and starts the server.
@@ -79,7 +62,7 @@ func Start() {
 	// <-
 
 	logging.Info("starting heartbeat")
-	go startHeartbeat(ctx)
+	StartHeartbeat(ctx)
 
 	logging.Info("serivce started successfully")
 
@@ -87,27 +70,33 @@ func Start() {
 	logging.Info("service stopped")
 }
 
-// startHeartbeat starts the heartbeat endpoint, and provides an endpoint for health monitoring.
+func Stop() error {
+	if err := hbsvr.Shutdown(ctx); err != nil && !errors.Is(err, http.ErrServerClosed) {
+		return err
+	}
+	time.Sleep(1 * time.Second)
+	return nil
+}
+
+// StartHeartbeat starts the heartbeat endpoint, and provides an endpoint for health monitoring.
 // It can also be used to provide a liveness and readiness check for Kubernetes.
-func startHeartbeat(ctx context.Context) {
+func StartHeartbeat(ctx context.Context) {
 	hbr := gin.New()
 	hbr.Use(gin.Recovery())
-	hbr.GET("/heartbeat", heartbeat.Handler("tunnelvisioin", checkDeps()...))
+	hbr.GET("/heartbeat", heartbeat.Handler("tunnelvisioin", CheckDeps()...))
 	addr := fmt.Sprintf(":%d", conf.DefaultHeartbeatPort)
 
 	logging.Info("starting heartbeat", logging.KeyValue{Key: "addr", Value: addr})
-
+	hbsvr = &http.Server{Addr: addr, Handler: hbr}
 	go func() {
-		if err := hbr.Run(addr); err != nil {
-			utils.FailFast(err, "failed to initialize heartbeat")
+		if err := hbsvr.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			logging.Fatal(err, "heartbeat endpoint failed with error")
 		}
 	}()
-
-	<-ctx.Done()
 }
 
-// checkDeps provides a list of dependencies to be checked by the heartbeat endpoint.
-func checkDeps() []heartbeat.DependencyDescriptor {
+// CheckDeps provides a list of dependencies to be checked by the heartbeat endpoint.
+func CheckDeps() []heartbeat.DependencyDescriptor {
 	deps := []heartbeat.DependencyDescriptor{
 		{
 			Name: "desc 01",

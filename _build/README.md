@@ -13,13 +13,7 @@ To use the `build.sh` script, run the following command:
 ```
 BUILD_DATE="$(BUILD_DATE)" \
 BUILD_VER="$(BUILD_VER)" \
-GIT_COMMIT="$(GIT_COMMIT)" \
 DOCKERFILE_DIR="$(PWD)" \
-ALPINE_VERSION="$(ALPINE_VERSION)" \
-GO_VERSION="$(GO_VERSION)" \
-DESCRIPTION="$(DESCRIPTION)" \
-VENDOR="$(VENDOR)" \
-TARGET="$(TARGET)" \
 ./_build/build.sh
 ```
 
@@ -29,13 +23,7 @@ The following environment variables are used by the `build.sh` script:
 
 - `BUILD_DATE`: The build date of the binary
 - `BUILD_VER`: The build semantic version (if a release candidate) of the binary
-- `GIT_COMMIT`: The short commit hash of the commit being used for the build
 - `DOCKERFILE_DIR`: The directory containing the target Dockerfile
-- `ALPINE_VERSION`: The version of the Alpine image to use
-- `GO_VERSION`: The version of the Go image to use, as available in the Alpine Go images
-- `DESCRIPTION`: The description of the binary to be used in the Dockerfile
-- `VENDOR`: The vendor of the binary
-- `TARGET`: The file that will be targeted for the build, e.g., `main.go`
 
 ### Functionality
 
@@ -71,7 +59,6 @@ If you need to add additional environment variables to customize the build proce
 ```bash
 common::checkEnv "BUILD_DATE"
 common::checkEnv "BUILD_VER"
-common::checkEnv "GIT_COMMIT"
 # ...
 ```
 
@@ -89,10 +76,9 @@ Replace `YOUR_NEW_ENV_VAR` with the name of your new environment variable.
 docker build --force-rm \
   --build-arg BUILD_DATE="$BUILD_DATE" \
   --build-arg BUILD_VER="$BUILD_VER" \
-  --build-arg GIT_COMMIT="$GIT_COMMIT" \
   # ...
   --build-arg YOUR_NEW_ENV_VAR="$YOUR_NEW_ENV_VAR" \
-  -t "{{bin_name}}":"$BUILD_VER" -f dockerfile .
+  -t "devapp":"$BUILD_VER" -f Dockerfile .
 ```
 
 Replace `YOUR_NEW_ENV_VAR` with the name of your new environment variable.
@@ -133,4 +119,4 @@ If you'd like to contribute to the build scripts, please follow the contribution
 
 ## License
 
-The build scripts are released under the [MIT License](LICENSE).
+The build scripts are released under the [MIT License](../LICENSE).

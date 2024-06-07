@@ -1,25 +1,14 @@
-BIN_DIR := "./_bin/"
-BIN_NAME := "{{bin_name}}"
+BIN_DIR := "./bin/"
+OUT := "BIN_NAME"
 BUILD_DATE := $(shell date +"%Y-%m-%d")
-BUILD_VER := ""
-GIT_COMMIT := "n/a"
-MODULE_NAME :=  "{{module_name}}"
-ALPINE_VERSION := "3.19"
-GO_VERSION := "1.21.9"
-DESCRIPTION:= "{{description}}"
-VENDOR:= "{{vendor_name}}"
+BUILD_VER := "0.0.1"
 TARGET:= "main.go"
-
-
-ifeq ($(shell git rev-parse --is-inside-work-tree 2>/dev/null),true)
-  GIT_COMMIT := $(shell git rev-parse --short HEAD)pwd
-endif
 
 default: help
 
 .PHONY: help
 help:
-	@echo "\{{bin_name}} makefile usage: make [target]"
+	@echo "\devapp makefile usage: make [target]"
 	@echo "  Targets:"
 	@echo "  » clean           Remove build artifacts and clean up the project"
 	@echo "  » bin             Build the binary and output to _bin/ directory"
@@ -34,10 +23,8 @@ clean:
 .PHONY: bin
 bin: clean
 	go build \
-	-ldflags "-X '$(MODULE_NAME)/cmd/conf.buildDate=$(BUILD_DATE)' \
-	-X '$(MODULE_NAME)/cmd/conf.buildVer=$(BUILD_VER)' \
-	-X '$(MODULE_NAME)/cmd/conf.buildCommit=$(GIT_COMMIT)' -s -w" \
-	-o $(BIN_DIR)$(BIN_NAME) $(TARGET)
+	-ldflags "-X 'MODULE_NAME/conf.buildDate=$(BUILD_DATE)' -X 'MODULE_NAME/conf.buildVer=$(BUILD_VER)' -s -w" \
+	-o $(BIN_DIR)$(OUT) $(TARGET)
 
 .PHONY: test
 test:
@@ -45,16 +32,12 @@ test:
 	go tool cover -html=coverage.out
 
 .PHONY: run
-run:
-	go run main.go
+run: bin
+	NAMESPACE=test ./$(BIN_DIR)$(OUT)
 
 .PHONY: image
 image:
 	BUILD_DATE="$(BUILD_DATE)" \
 	BUILD_VER="$(BUILD_VER)" \
-	GIT_COMMIT="$(GIT_COMMIT)" \
 	DOCKERFILE_DIR="$(PWD)" \
-	ALPINE_VERSION="$(ALPINE_VERSION)" \
-	GO_VERSION="$(GO_VERSION)" \
-	TARGET="$(TARGET)" \
 	./_build/build.sh

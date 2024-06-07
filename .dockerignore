@@ -3,11 +3,12 @@ _*/
 .vscode/
 .idea/
 vendor/
+bin/
 Gopkg.lock
 go.sum
 
-makefile
-dockerfile
+Makefile
+Dockerfile
 docker-compose.yaml
 .gitignore
 .dockerignore

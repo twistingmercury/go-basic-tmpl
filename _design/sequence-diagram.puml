@@ -1,6 +1,6 @@
 ' This is a sample sequence diagram
-@startuml service sequence diagram 
-title  "Service Sequence Diagram"
+@startuml example sequence diagram 
+title  "Example Sequence Diagram"
 autonumber
 
 participant "gRPC Client" as c
