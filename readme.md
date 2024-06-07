@@ -4,7 +4,7 @@ _**TODO**: A brief description of your Go project goes here. Explain what your p
 
 ## Table of Contents
 
-- [Project {{bin\_name}}](#project-bin_name)
+- [Project MODULE_NAME](#project-MODULE_NAME)
   - [Table of Contents](#table-of-contents)
   - [Installation](#installation)
   - [Usage](#usage)
