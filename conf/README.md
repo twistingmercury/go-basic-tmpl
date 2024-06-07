@@ -1,6 +1,6 @@
 # How to use and update the conf package.
 
-The `conf` package is responsible for handling the configuration of the Go application. It uses the [viper]() package for configuration management and the `pflag` package for command-line flag parsing.
+The `conf` package is responsible for handling the configuration of the Go application. It uses the [viper](https://github.com/spf13/viper) package for configuration management and the `pflag` package for command-line flag parsing.
 
 ## Configuration Keys
 
@@ -54,13 +54,11 @@ The `conf` package defines default values for the following configuration keys:
 To access and utilize the configuration values in your Go application, follow these steps:
 
 1. Import the `conf` package in the file where you want to use the configuration values:
-
 ```go
 import "path/to/conf"
 ```
 
 2. Call the `conf.Initialize()` function to initialize the configuration. This should be done in the `main` function or during the application's startup:
-
 ```go
 func main() {
     conf.Initialize()
@@ -69,7 +67,6 @@ func main() {
 ```
 
 3. Access the configuration values using the `viper.Get*` functions, based on the data type of the value you want to retrieve. Use the constants defined in the `conf` package as keys:
-
 ```go
 logLevel := viper.GetString(conf.ViperLogLevelKey)
 traceSampleRate := viper.GetFloat64(conf.ViperTraceSampleRateKey)
@@ -98,7 +95,6 @@ const (
 ```
 
 3. To add a new command-line flag, define a new constant in the `// flags` section and add a new `pflag.String` or `pflag.Bool` call in the `init` function:
-
 ```go
 const (
     // ...
@@ -112,7 +108,6 @@ func init() {
 ```
 
 4. To add a new environment variable, define a new constant in the `// env vars` section:
-
 ```go
 const (
     // ...
@@ -121,7 +116,6 @@ const (
 ```
 
 5. In the `Initialize` function, bind the new configuration key to the corresponding command-line flag and environment variable using `viper.BindPFlag` and `viper.BindEnv`:
-
 ```go
 func Initialize() {
     // ...
@@ -131,7 +125,6 @@ func Initialize() {
 ```
 
 6. If needed, set a default value for the new configuration key using `viper.SetDefault`:
-
 ```go
 func Initialize() {
     // ...

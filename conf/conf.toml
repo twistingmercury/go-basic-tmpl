@@ -1,0 +1,11 @@
+title = "sample configuration file"
+
+[telemetry]
+log_level = "debug" # [debug|info|warn|error]
+environment = "dev" # [dev|test|stage|prod]
+trace_sample_rate = 0.25 # floating point value between 0.1 and 1.0
+prom_port = 9090
+heartbeat_port = 8181
+
+[server]
+# other settings needed for the app

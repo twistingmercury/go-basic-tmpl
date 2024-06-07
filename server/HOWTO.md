@@ -9,11 +9,11 @@ The `server` package is responsible for initializing and starting the applicatio
 The `Bootstrap` function initializes the application's telemetry components, including logging, tracing, and metrics. It performs the following steps:
 
 1. Initializes the configuration using `conf.Initialize()`.
-2. Shows the version information if the `ViperShowVersionKey` flag is set.
-3. Shows the help information if the `ViperShowHelpKey` flag is set.
-4. Initializes the `zerolog` logger with the specified log level and attaches it to `os.Stdout`.
+2. Shows the version information if the `--version` flag is set.
+3. Shows the help information if the `--help` flag is set.
+4. Initializes `twistingmercury/telemetry/logging` with the specified log level and attaches it to `os.Stdout`.
 5. Initializes the OpenTelemetry tracer with the specified trace sampler and exporter.
-6. Initializes the OpenTelemetry meter with the specified exporter.
+6. Initializes Prometheus metrics.
 
 ### Start
 

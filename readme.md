@@ -19,10 +19,10 @@ _**TODO**:Provide instructions on how to install and set up your Go project. Inc
 
 ```bash
 # Clone the repository
-git clone {{module}}.git
+git clone [path to git repo]
 
 # Change to the project directory
-cd {{bin_name}}
+cd BIN_NAME
 
 # Install dependencies
 go mod download
@@ -37,25 +37,12 @@ _**TODO**: Explain how to use your Go project. Provide examples, command-line in
 
 ```bash
 # Run the project
-./project
-
-# Command-line flags
-./project --help
+make run
 ```
 
 ## Configuration
 
-_**TODO**: If your project requires any configuration, describe how to configure it here. Provide examples of configuration files or environment variables that need to be set._
-
-```yaml
-# config.yaml
-server:
-  port: 8080
-  host: localhost
-
-database:
-  url: postgres://user:password@localhost:5432/dbname
-```
+See [conf/README.md](./conf/README.md)
 
 ## Contributing
 
@@ -81,14 +68,11 @@ Describe how to run tests for your Go project. Provide instructions on running u
 
 ```bash
 # Run unit tests
-go test ./...
-
-# Run integration tests
-go test -tags=integration ./...
+make test
 ```
 
 ## License
 
 Specify the license under which your project is distributed. Provide a link to the full license text if applicable.
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [MIT License](./LICENSE).

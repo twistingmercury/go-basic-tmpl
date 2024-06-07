@@ -1,6 +1,6 @@
 ' This is a sample block diagram
-@startuml {{service_name}} block diagram
-title "{{service_name}} block diagram"
+@startuml example block diagram
+title "Example block diagram"
 skinparam linetype ortho
 
 card request <<gRPC>> as request

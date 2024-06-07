@@ -9,6 +9,7 @@ _TODO: briefly describe the problem to be solved by this solution._
 ## Design considerations
 
 _TODO: Add the exported diagram from [block-diagram.puml](./block-diagram.puml) here. Example:_
+
 ![](./block-diagram.png)
 
 _TODO: Describe at a high-level the purpose of the application._
