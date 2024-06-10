@@ -3,6 +3,8 @@ package server_test
 import (
 	"MODULE_NAME/conf"
 	"context"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/twistingmercury/telemetry/metrics"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -42,26 +44,23 @@ func TestBootstrap(t *testing.T) {
 
 func TestStart(t *testing.T) {
 	// Create a new context
-	ctx, cancel := context.WithCancel(context.Background())
+	ctx, cancel := context.WithTimeout(context.Background(), 1500*time.Millisecond)
+	server.SetContext(ctx)
 	defer cancel()
 
-	// Call the Bootstrap function
-	err := server.Bootstrap(ctx, svcName, svcVersion, nspace, environ)
+	err := metrics.Initialize(ctx, nspace, svcName)
 	require.NoError(t, err)
 
-	// Start the server in a goroutine
-	go server.Start()
+	utCounter := prometheus.NewCounterVec(prometheus.CounterOpts{
+		Namespace: "unit",
+		Name:      "test_counter",
+		Help:      "unit test counter"},
+		[]string{"label1", "label2", "label3"})
 
-	time.Sleep(1 * time.Second)
-	cancel()
-	err = server.Stop()
-	require.NoError(t, err)
+	server.SetCounter(utCounter)
+	metrics.RegisterMetrics(utCounter)
 
-	// Perform any necessary assertions or checks
-	// ...
-
-	// Cancel the context to stop the server
-	cancel()
+	server.Start()
 }
 
 func TestStartHeartbeat(t *testing.T) {
