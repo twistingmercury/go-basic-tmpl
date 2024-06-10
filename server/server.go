@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/prometheus/client_golang/prometheus"
 	"net/http"
 	"os"
 	"time"
@@ -22,8 +23,9 @@ import (
 )
 
 var (
-	ctx   context.Context
-	hbsvr *http.Server
+	ctx           context.Context
+	hbsvr         *http.Server
+	sampleCounter *prometheus.CounterVec
 )
 
 // Bootstrap initializes the application's telemetry components, logging, tracing, and metrics.
@@ -32,6 +34,9 @@ func Bootstrap(context context.Context, svcName, svcVersion, namespace, environm
 	conf.ShowHelp()
 
 	logLevel, err := zerolog.ParseLevel(viper.GetString(conf.ViperLogLevelKey))
+	if err != nil {
+		return err
+	}
 	err = logging.Initialize(logLevel, os.Stdout, svcName, svcVersion, environment)
 	if err != nil {
 		return err
@@ -49,20 +54,49 @@ func Bootstrap(context context.Context, svcName, svcVersion, namespace, environm
 	}
 
 	logging.Info("initializing metrics")
-	return metrics.Initialize(namespace, svcName)
+
+	err = metrics.Initialize(namespace, svcName)
+	if err != nil {
+		return err
+	}
+
+	// register metrics
+	// reference: https://github.com/twistingmercury/telemetry/blob/main/metrics/README.md
+	sampleCounter = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Namespace: viper.GetString(conf.ViperNamespaceKey),
+		Name:      "sample_counter",
+		Help:      "A sample counter metric"},
+		[]string{"label1", "label2", "label3"})
+
+	metrics.RegisterMetrics(sampleCounter)
+	metrics.Publish()
+
+	return nil
 }
 
 // Start initializes the application's API service and starts the server.
 func Start() {
 	logging.Info("starting server")
 
-	// ->
-	// do whatever is required to start the server, such as initializing the database, listening
-	// to message brokers, starting HTTP or gRPC servers, etc.
-	// <-
-
 	logging.Info("starting heartbeat")
 	StartHeartbeat(ctx)
+
+	// -->
+	// do whatever is required to start the server, such as initializing the database, listening
+	// to message brokers, starting HTTP or gRPC servers, etc.
+	go func() {
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				time.Sleep(5 * time.Second)
+				sampleCounter.WithLabelValues("foo", "bar", "bas").Inc()
+				logging.Info("doing some work")
+			}
+		}
+	}()
+	// <--
 
 	logging.Info("serivce started successfully")
 
@@ -96,13 +130,14 @@ func StartHeartbeat(ctx context.Context) {
 }
 
 // CheckDeps provides a list of dependencies to be checked by the heartbeat endpoint.
+// reference: https://github.com/twistingmercury/heartbeat/blob/main/readme.md
 func CheckDeps() []heartbeat.DependencyDescriptor {
 	deps := []heartbeat.DependencyDescriptor{
 		{
 			Name: "desc 01",
 			Type: "http/rest", // or whatever makes sense for your service
 			HandlerFunc: func() heartbeat.StatusResult {
-				hsr := heartbeat.StatusResult{Status: heartbeat.StatusNotSet, Message: "unknown"}
+				hsr := heartbeat.StatusResult{Status: heartbeat.StatusOK, Message: "ok"}
 				// for a REST apo, you'd create a func that checks if the REST api is reachable,
 				// perhaps invoking its health endpoint (if it has one).
 				return hsr
@@ -112,7 +147,7 @@ func CheckDeps() []heartbeat.DependencyDescriptor {
 			Name: "desc 02",
 			Type: "database",
 			HandlerFunc: func() heartbeat.StatusResult {
-				hsr := heartbeat.StatusResult{Status: heartbeat.StatusNotSet, Message: "unknown"}
+				hsr := heartbeat.StatusResult{Status: heartbeat.StatusOK, Message: "ok"}
 				// for a database, you'd create a func that checks if the database is up and running
 				return hsr
 			},
