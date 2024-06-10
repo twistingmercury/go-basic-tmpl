@@ -83,7 +83,7 @@ func Stop() error {
 func StartHeartbeat(ctx context.Context) {
 	hbr := gin.New()
 	hbr.Use(gin.Recovery())
-	hbr.GET("/heartbeat", heartbeat.Handler("tunnelvisioin", CheckDeps()...))
+	hbr.GET("/heartbeat", heartbeat.Handler("BIN_NAME", CheckDeps()...))
 	addr := fmt.Sprintf(":%d", conf.DefaultHeartbeatPort)
 
 	logging.Info("starting heartbeat", logging.KeyValue{Key: "addr", Value: addr})
