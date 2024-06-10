@@ -4,10 +4,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/prometheus/client_golang/prometheus"
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/prometheus/client_golang/prometheus"
 
 	"github.com/gin-gonic/gin"
 	"github.com/twistingmercury/heartbeat"
@@ -33,6 +34,7 @@ func Bootstrap(context context.Context, svcName, svcVersion, namespace, environm
 	conf.ShowVersion()
 	conf.ShowHelp()
 
+	// init logging
 	logLevel, err := zerolog.ParseLevel(viper.GetString(conf.ViperLogLevelKey))
 	if err != nil {
 		return err
@@ -43,6 +45,7 @@ func Bootstrap(context context.Context, svcName, svcVersion, namespace, environm
 	}
 	ctx = context
 
+	// init tracing
 	logging.Info("initializing tracing")
 	texporter, err := otlptracegrpc.New(ctx)
 	if err != nil {
@@ -53,14 +56,14 @@ func Bootstrap(context context.Context, svcName, svcVersion, namespace, environm
 		return err
 	}
 
+	// init metrics
 	logging.Info("initializing metrics")
-
-	err = metrics.Initialize(namespace, svcName)
+	err = metrics.Initialize(context, namespace, svcName)
 	if err != nil {
 		return err
 	}
 
-	// register metrics
+	// ---> register metrics
 	// reference: https://github.com/twistingmercury/telemetry/blob/main/metrics/README.md
 	sampleCounter = prometheus.NewCounterVec(prometheus.CounterOpts{
 		Namespace: viper.GetString(conf.ViperNamespaceKey),
@@ -70,6 +73,10 @@ func Bootstrap(context context.Context, svcName, svcVersion, namespace, environm
 
 	metrics.RegisterMetrics(sampleCounter)
 	metrics.Publish()
+	//<---
+
+	logging.Info("starting heartbeat")
+	StartHeartbeat(ctx)
 
 	return nil
 }
@@ -78,37 +85,34 @@ func Bootstrap(context context.Context, svcName, svcVersion, namespace, environm
 func Start() {
 	logging.Info("starting server")
 
-	logging.Info("starting heartbeat")
-	StartHeartbeat(ctx)
-
 	// -->
 	// do whatever is required to start the server, such as initializing the database, listening
 	// to message brokers, starting HTTP or gRPC servers, etc.
-	go func() {
-		for {
-			select {
-			case <-ctx.Done():
-				return
-			default:
-				time.Sleep(5 * time.Second)
-				sampleCounter.WithLabelValues("foo", "bar", "bas").Inc()
-				logging.Info("doing some work")
-			}
-		}
-	}()
 	// <--
 
-	logging.Info("serivce started successfully")
-
-	<-ctx.Done()
-	logging.Info("service stopped")
+	for {
+		select {
+		case <-ctx.Done():
+			logging.Info("stopping server")
+			stop()
+			return
+		default:
+			time.Sleep(1 * time.Second)
+			sampleCounter.WithLabelValues("foo", "bar", "bas").Inc()
+			logging.Info("doing some work")
+		}
+	}
 }
 
-func Stop() error {
+func stop() error {
+	if hbsvr == nil {
+		return nil
+	}
+
 	if err := hbsvr.Shutdown(ctx); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		return err
 	}
-	time.Sleep(1 * time.Second)
+
 	return nil
 }
 
