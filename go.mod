@@ -1,4 +1,4 @@
-module MODULE_NAME
+module token_go_module
 
 go 1.21.1
 

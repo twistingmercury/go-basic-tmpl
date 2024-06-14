@@ -106,7 +106,7 @@ Replace `YOUR_NEW_ENV_VAR` with the name of your new environment variable and pr
 Now, when running the `build.sh` script, make sure to provide a value for your new environment variable:
 
 ```bash
-YOUR_NEW_ENV_VAR="value" ./build.sh
+YOUR_NEW_ENV_VAR="value" ./build-release.sh
 ```
 
 The `build.sh` script will check for the presence of your new environment variable and pass it to the Docker build command as a build argument. The Dockerfile will accept the value using the corresponding `ARG`. The `help` function in `common.sh` will also display information about your new environment variable when invoked.

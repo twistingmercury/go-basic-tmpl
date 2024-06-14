@@ -1,7 +1,6 @@
 package server_test
 
 import (
-	"MODULE_NAME/conf"
 	"context"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/twistingmercury/telemetry/metrics"
@@ -10,12 +9,12 @@ import (
 	"net/http/httptest"
 	"testing"
 	"time"
+	"token_go_module/internal/conf"
+	"token_go_module/internal/server"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"github.com/twistingmercury/heartbeat"
-
-	"MODULE_NAME/server"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

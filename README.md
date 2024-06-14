@@ -1,4 +1,4 @@
-# Project MODULE_NAME
+# Project token_bin
 
 _**TODO**: A brief description of your Go project goes here. Explain what your project does, its purpose, and any key features or benefits. Feel free to customize this template based on your project's specific needs. Add or remove sections as necessary, and provide detailed information to help users understand and use your Go project effectively._
 
@@ -11,7 +11,6 @@ _**TODO**: A brief description of your Go project goes here. Explain what your p
   - [Configuration](#configuration)
   - [Contributing](#contributing)
   - [Testing](#testing)
-  - [License](#license)
 
 ## Installation
 
@@ -42,7 +41,7 @@ make run
 
 ## Configuration
 
-See [conf/README.md](./conf/README.md)
+See [conf/README.md](internal/conf/README.md)
 
 ## Contributing
 
@@ -70,9 +69,3 @@ Describe how to run tests for your Go project. Provide instructions on running u
 # Run unit tests
 make test
 ```
-
-## License
-
-Specify the license under which your project is distributed. Provide a link to the full license text if applicable.
-
-This project is licensed under the [MIT License](./LICENSE).
