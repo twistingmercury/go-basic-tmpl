@@ -1,10 +1,7 @@
-ARG GOLANG_IMAGE_VERSION
-
-FROM golang:${GOLANG_IMAGE_VERSION} as build
+FROM golang:alpine as build
 ENV CGO_ENABLED=0 GO_ENABLED=0
 
 ARG BUILD_DATE
-ARG BUILD_VER
 
 RUN apk --no-cache add ca-certificates
 
@@ -14,8 +11,8 @@ COPY .. .
 RUN apk add --no-cache git
 RUN go mod tidy
 RUN go build -ldflags \
-    "-X 'token_go_module/conf.buildDate=${BUILD_DATE} -X 'token_go_module/conf.buildVer=${BUILD_VER}' -s -w" \
-    -o ./bin/token_bin main.go
+    "-X 'token_go_module/internal/conf.buildDate=${BUILD_DATE}' -s -w" \
+    -o ./bin/token_bin cmd/main.go
 
 FROM scratch as final
 
@@ -32,7 +29,7 @@ LABEL \
     com.mcg.container.os="scratch"
 
 WORKDIR /app
-COPY --from=build /src/bin/ /app/
+COPY --from=build /token_go_bin/bin/ /app/
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
 ENTRYPOINT ["/app/token_bin"]

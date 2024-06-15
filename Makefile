@@ -1,8 +1,8 @@
 BIN_DIR := "./bin/"
-OUT := "token_bin"
+OUT := "token_go_bin"
 BUILD_DATE := $(shell date +"%Y-%m-%d")
 BUILD_VER := "0.0.1"
-TARGET:= "main.go"
+TARGET:= "cmd/main.go"
 
 default: help
 
@@ -29,7 +29,7 @@ bin: clean
 
 .PHONY: test
 test:
-	go test ./conf ./server -coverprofile=coverage.out
+	go test ./internal/conf ./internal/server -coverprofile=coverage.out
 	go tool cover -html=coverage.out
 
 .PHONY: run
@@ -38,11 +38,9 @@ run: bin
 
 .PHONY:image-dev
 image-dev:
-	./_build/build.sh
+	BUILD_VER="$(BUILD_VER)" ./build/build-develop.sh
 
 .PHONY:image-rel
 image-rel:
-	BUILD_DATE="$(BUILD_DATE)" \
 	BUILD_VER="$(BUILD_VER)" \
-	DOCKERFILE_DIR="$(PWD)" \
-	./_build/build.sh
+	./build/build-release.sh

@@ -54,25 +54,23 @@ The `conf` package defines default values for the following configuration keys:
 To access and utilize the configuration values in your Go application, follow these steps:
 
 1. Import the `conf` package in the file where you want to use the configuration values:
-```go
-import "path/to/conf"
-```
+   ```go
+    import "path/to/conf"   
+   ```
 
 2. Call the `conf.Initialize()` function to initialize the configuration. This should be done in the `main` function or during the application's startup:
-```go
-func main() {
-    conf.Initialize()
-    // ...
-}
-```
-
+   ```go
+    func main() {
+        conf.Initialize()
+        // ...
+    }
+   ```
 3. Access the configuration values using the `viper.Get*` functions, based on the data type of the value you want to retrieve. Use the constants defined in the `conf` package as keys:
-```go
-logLevel := viper.GetString(conf.ViperLogLevelKey)
-traceSampleRate := viper.GetFloat64(conf.ViperTraceSampleRateKey)
-environment := viper.GetString(conf.ViperEnviormentKey)
-```
-
+   ```go
+    logLevel := viper.GetString(conf.ViperLogLevelKey)
+    traceSampleRate := viper.GetFloat64(conf.ViperTraceSampleRateKey)
+    environment := viper.GetString(conf.ViperEnviormentKey)
+   ```
 4. Use the retrieved configuration values as needed in your application logic.
 
 For example, you can use the `logLevel` value to set the log level of your logger, or the `traceSampleRate` value to configure the sampling rate for distributed tracing.
@@ -86,52 +84,46 @@ To add new configuration keys, command-line flags, or environment variables, fol
 1. Open the `conf.go` file in a text editor.
 
 2. To add a new configuration key, define a new constant in the `// viper keys` section:
-
-```go
-const (
-    // ...
-    ViperNewKeyKey = "new_key"
-)
-```
-
+   ```go
+    const (
+        // ...
+        ViperNewKeyKey = "new_key"
+    )
+   ```
 3. To add a new command-line flag, define a new constant in the `// flags` section and add a new `pflag.String` or `pflag.Bool` call in the `init` function:
-```go
-const (
-    // ...
-    NewFlag = "new-flag"
-)
-
-func init() {
-    // ...
-    _ = pflag.String(NewFlag, "", "Description of the new flag")
-}
-```
-
+   ```go
+    const (
+        // ...
+        NewFlag = "new-flag"
+    )
+    
+    func init() {
+        // ...
+        _ = pflag.String(NewFlag, "", "Description of the new flag")
+    }
+   ```
 4. To add a new environment variable, define a new constant in the `// env vars` section:
-```go
-const (
-    // ...
-    NewEnv = "NEW_ENV"
-)
-```
-
+   ```go
+    const (
+        // ...
+        NewEnv = "NEW_ENV"
+    )
+    ```
 5. In the `Initialize` function, bind the new configuration key to the corresponding command-line flag and environment variable using `viper.BindPFlag` and `viper.BindEnv`:
-```go
-func Initialize() {
-    // ...
-    _ = viper.BindPFlag(ViperNewKeyKey, pflag.Lookup(NewFlag))
-    _ = viper.BindEnv(ViperNewKeyKey, NewEnv)
-}
-```
-
+   ```go
+    func Initialize() {
+        // ...
+        _ = viper.BindPFlag(ViperNewKeyKey, pflag.Lookup(NewFlag))
+        _ = viper.BindEnv(ViperNewKeyKey, NewEnv)
+    }
+    ```
 6. If needed, set a default value for the new configuration key using `viper.SetDefault`:
-```go
-func Initialize() {
-    // ...
-    viper.SetDefault(ViperNewKeyKey, "default_value")
-}
-```
-
+   ```go
+    func Initialize() {
+        // ...
+        viper.SetDefault(ViperNewKeyKey, "default_value")
+    }
+   ```
 7. Save the changes to the `conf.go` file.
 
 Now, the new configuration key, command-line flag, and environment variable will be available for use in your Go application. You can access the value of the new configuration key using `viper.GetString(conf.ViperNewKeyKey)` or the appropriate `viper.Get*` function based on the data type.

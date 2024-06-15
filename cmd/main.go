@@ -21,7 +21,7 @@ func main() {
 		viper.GetString(conf.ViperNamespaceKey),
 		viper.GetString(conf.ViperEnviormentKey),
 	); err != nil {
-		logging.Fatal(err, "failed to bootstrap the cmd")
+		logging.Fatal(err, "failed to bootstrap the server")
 	}
 
 	server.Start()
