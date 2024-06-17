@@ -10,7 +10,7 @@ COPY .. .
 
 RUN apk add --no-cache git
 RUN go mod tidy
-RUN go build -ldflags "-X 'token_go_module/internal/conf.buildDate=$(BUILD_DATE)' -s -w" -o ./bin/token_go_bin cmd/main.go
+RUN go build -ldflags "-X 'my/module/internal/conf.buildDate=${BUILD_DATE}' -s -w" -o ./bin/myapp cmd/main.go
 
 FROM scratch as final
 
