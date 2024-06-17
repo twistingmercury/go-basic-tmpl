@@ -43,6 +43,15 @@ make run
 
 See [conf/README.md](internal/conf/README.md)
 
+## Testing
+
+Describe how to run tests for your Go project. Provide instructions on running unit tests, integration tests, or any other test suites.
+
+```bash
+# Run unit tests
+make test
+```
+
 ## Contributing
 
 Specify guidelines for contributing to your project. Explain how developers can get involved, submit bug reports, or propose new features. Include any coding conventions, branch naming, or pull request procedures.
@@ -61,11 +70,3 @@ git push origin feature/my-feature
 # Open a pull request
 ```
 
-## Testing
-
-Describe how to run tests for your Go project. Provide instructions on running unit tests, integration tests, or any other test suites.
-
-```bash
-# Run unit tests
-make test
-```
