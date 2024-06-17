@@ -23,8 +23,6 @@ LABEL \
     org.opencontainers.image.vendor="token_docker_vendor_name" \
     org.opencontainers.image.description="token_docker_descr" \
     org.opencontainers.image.title="token_go_bin" \
-    com.mcg.container.help="docker exec -it <CONTAINER> /app/token_go_bin --help" \
-    com.mcg.container.os="scratch"
 
 WORKDIR /app
 COPY --from=build /token_go_bin/bin/ /app/
