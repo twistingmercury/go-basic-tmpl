@@ -25,7 +25,7 @@ LABEL \
     org.opencontainers.image.title="token_go_bin"
 
 WORKDIR /app
-COPY --from=build /token_go_bin/bin/ /app/
+COPY --from=build /src/bin/ /app/
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
 EXPOSE 8181 9090
