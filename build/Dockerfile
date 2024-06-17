@@ -22,7 +22,7 @@ LABEL \
     org.opencontainers.image.version="${BUILD_VER}" \
     org.opencontainers.image.vendor="token_docker_vendor_name" \
     org.opencontainers.image.description="token_docker_descr" \
-    org.opencontainers.image.title="token_go_bin" \
+    org.opencontainers.image.title="token_go_bin"
 
 WORKDIR /app
 COPY --from=build /token_go_bin/bin/ /app/
