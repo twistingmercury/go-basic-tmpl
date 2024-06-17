@@ -19,10 +19,15 @@ To create a new Go project using this template, you'll need to use the [scaffold
 
 Since this is a template, understand that cloning this project directly and attempting to compile it will fail. This is due to the replacement tokens scattered throughout the template:
 
-- `MODULE_NAME`     This is the name of the module, as declared in the go.mod file, i.e., `github.com/your-name/your-project`
-- `BIN_NAME`        This will be the name of the compiled binary, the name of the root folder, and the name of the docker image.
-- `IMG_VENDOR_NAME    ` This is the name of the vendor to be added to the `org.opencontainers.image.vendor` label in the docker image.
-- `IMG_DESCRIPTION`     This is a description of the app to be added to the `org.opencontainers.image.description` label in the docker image.
+Sure, here is the provided Markdown list converted into a Markdown table:
+
+| Token                      | Description                                                                                                           |
+|----------------------------|-----------------------------------------------------------------------------------------------------------------------|
+| `token_go_module`          | This is the name of the module, as declared in the go.mod file, i.e., `github.com/your-name/your-project`             |
+| `token_go_bin`             | This will be the name of the compiled binary, the name of the root folder, and the name of the docker image.          |
+| `token_docker_vendor_name` | This is the name of the vendor to be added to the `org.opencontainers.image.vendor` label in the docker image.        |
+| `token_docker_descr`       | This is a description of the app to be added to the `org.opencontainers.image.description` label in the docker image. |
+
 
 ### Prerequisites
 
@@ -67,7 +72,3 @@ To use the Makefile, simply run `make <target>` in your terminal, replacing `<ta
 
 Instead of modifying this template directly, I recommend that you fork this project and modify it to your liking. The 
 [scaffolder](https://github.com/twistingmercury/scaffolder) can be pointed to a different repository by using its `--template` flag. The default for that flag is this project.
-
-## License
-
-This Go template project template is released under the [MIT License](./LICENSE).
