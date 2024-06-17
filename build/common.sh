@@ -9,9 +9,8 @@ function common::checkenv() {
 
 function common::help() {
     echo "Usage:"
-    echo "  BUILD_DATE=<BUILD_DATE> BUILD_VER=<BUILD_VER> DOCKERFILE_DIR=<DOCKERFILE_DIR> ./build/build-image.sh"
+    echo "  BUILD_VER=<BUILD_VER> ./build/build-[develop | release].sh"
     echo "\nEnvironment variables:"
-    echo "  BUILD_DATE:     The build date of the binary"
     echo "  BUILD_VER:      The build semantic version (if a release candidate) of the binary"
     exit 1
 }

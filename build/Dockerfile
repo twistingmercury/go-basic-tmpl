@@ -5,14 +5,12 @@ ARG BUILD_DATE
 
 RUN apk --no-cache add ca-certificates
 
-WORKDIR /token_go_bin
+WORKDIR /src
 COPY .. .
 
 RUN apk add --no-cache git
 RUN go mod tidy
-RUN go build -ldflags \
-    "-X 'token_go_module/internal/conf.buildDate=${BUILD_DATE}' -s -w" \
-    -o ./bin/token_bin cmd/main.go
+RUN go build -ldflags "-X 'token_go_module/internal/conf.buildDate=$(BUILD_DATE)' -s -w" -o ./bin/token_go_bin cmd/main.go
 
 FROM scratch as final
 
@@ -24,7 +22,7 @@ LABEL \
     org.opencontainers.image.version="${BUILD_VER}" \
     org.opencontainers.image.vendor="token_docker_vendor_name" \
     org.opencontainers.image.description="token_docker_descr" \
-    org.opencontainers.image.title="token_bin" \
+    org.opencontainers.image.title="token_go_bin" \
     com.mcg.container.help="docker exec -it <CONTAINER> /app/token_go_bin --help" \
     com.mcg.container.os="scratch"
 
@@ -32,4 +30,4 @@ WORKDIR /app
 COPY --from=build /token_go_bin/bin/ /app/
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
-ENTRYPOINT ["/app/token_bin"]
+ENTRYPOINT ["/app/token_go_bin"]

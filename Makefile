@@ -1,8 +1,5 @@
-BIN_DIR := "./bin/"
-OUT := "token_go_bin"
 BUILD_DATE := $(shell date +"%Y-%m-%d")
 BUILD_VER := "0.0.1"
-TARGET:= "cmd/main.go"
 
 default: help
 
@@ -24,8 +21,8 @@ clean:
 .PHONY: bin
 bin: clean
 	go build \
-	-ldflags "-X 'MODULE_NAME/conf.buildDate=$(BUILD_DATE)' -X 'MODULE_NAME/conf.buildVer=$(BUILD_VER)' -s -w" \
-	-o $(BIN_DIR)$(OUT) $(TARGET)
+	-ldflags "-X 'token_go_module/internal/conf.buildDate=$(BUILD_DATE)' -s -w"
+	-o ./bin/token_go_bin cmd/main.go
 
 .PHONY: test
 test:
@@ -34,7 +31,7 @@ test:
 
 .PHONY: run
 run: bin
-	NAMESPACE=test ./$(BIN_DIR)$(OUT)
+	./bin/token_go_bin
 
 .PHONY:image-dev
 image-dev:
@@ -42,5 +39,4 @@ image-dev:
 
 .PHONY:image-rel
 image-rel:
-	BUILD_VER="$(BUILD_VER)" \
-	./build/build-release.sh
+	BUILD_VER="$(BUILD_VER)" ./build/build-release.sh
