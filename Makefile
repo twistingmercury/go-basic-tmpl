@@ -21,8 +21,7 @@ clean:
 .PHONY: bin
 bin: clean
 	go build \
-	-ldflags "-X 'token_go_module/internal/conf.buildDate=$(BUILD_DATE)' -s -w"
-	-o ./bin/token_go_bin cmd/main.go
+	-ldflags "-X 'token_go_module/internal/conf.buildDate=$(BUILD_DATE)' -s -w" -o ./bin/token_go_bin cmd/main.go
 
 .PHONY: test
 test:
