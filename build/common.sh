@@ -13,6 +13,5 @@ function common::help() {
     echo "\nEnvironment variables:"
     echo "  BUILD_DATE:     The build date of the binary"
     echo "  BUILD_VER:      The build semantic version (if a release candidate) of the binary"
-    echo "  DOCKERFILE_DIR: The directory containing the target Dockerfile"
     exit 1
 }

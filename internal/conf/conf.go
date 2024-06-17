@@ -63,10 +63,9 @@ const ( // Default values
 var exitFunc = os.Exit
 
 var (
-	// build information: this is set at compile time using LDFlags
-	buildVer    = "n/a"
+	buildVer    = "0.0.1"
 	buildDate   = "n/a"
-	serviceName = "BIN_NAME"
+	serviceName = "token_go_bin"
 )
 
 var (

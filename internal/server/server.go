@@ -7,13 +7,12 @@ import (
 	"net/http"
 	"os"
 	"time"
+	"token_go_module/internal/conf"
 
 	"github.com/prometheus/client_golang/prometheus"
 
 	"github.com/gin-gonic/gin"
 	"github.com/twistingmercury/heartbeat"
-
-	"MODULE_NAME/conf"
 
 	"github.com/rs/zerolog"
 	"github.com/spf13/viper"
@@ -81,19 +80,19 @@ func Bootstrap(context context.Context, svcName, svcVersion, namespace, environm
 	return nil
 }
 
-// Start initializes the application's API service and starts the server.
+// Start initializes the application's API service and starts the cmd.
 func Start() {
-	logging.Info("starting server")
+	logging.Info("starting cmd")
 
 	// -->
-	// do whatever is required to start the server, such as initializing the database, listening
+	// do whatever is required to start the cmd, such as initializing the database, listening
 	// to message brokers, starting HTTP or gRPC servers, etc.
 	// <--
 
 	for {
 		select {
 		case <-ctx.Done():
-			logging.Info("stopping server")
+			logging.Info("stopping cmd")
 			stop()
 			return
 		default:

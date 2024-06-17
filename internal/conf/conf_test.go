@@ -4,11 +4,10 @@ import (
 	"fmt"
 	"os"
 	"testing"
+	conf2 "token_go_module/internal/conf"
 
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/require"
-
-	"MODULE_NAME/conf"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -22,41 +21,41 @@ const (
 )
 
 func init() {
-	conf.SetBuildVersion(tVer)
-	conf.SetServiceName(tServiceName)
-	conf.SetBuildDate(tDate)
-	conf.SetLogLevel(tlogLevel)
-	viper.Set(conf.ViperOtelAddrKey, tOtelColEP)
+	conf2.SetBuildVersion(tVer)
+	conf2.SetServiceName(tServiceName)
+	conf2.SetBuildDate(tDate)
+	conf2.SetLogLevel(tlogLevel)
+	viper.Set(conf2.ViperOtelAddrKey, tOtelColEP)
 }
 
 func TestDefaultValues(t *testing.T) {
 	defer viper.Reset()
-	conf.Initialize()
+	conf2.Initialize()
 
-	assert.False(t, viper.GetBool(conf.ViperShowVersionKey))
-	assert.False(t, viper.GetBool(conf.ViperShowHelpKey))
-	assert.Equal(t, tlogLevel, viper.GetString(conf.ViperLogLevelKey))
-	assert.Equal(t, tVer, viper.GetString(conf.ViperBuildVersionKey))
-	assert.Equal(t, tDate, viper.GetString(conf.ViperBuildDateKey))
-	assert.Equal(t, tServiceName, viper.GetString(conf.ViperServiceNameKey))
-	assert.Equal(t, conf.DefaultTraceSampleRate, viper.GetFloat64(conf.ViperTraceSampleRateKey))
+	assert.False(t, viper.GetBool(conf2.ViperShowVersionKey))
+	assert.False(t, viper.GetBool(conf2.ViperShowHelpKey))
+	assert.Equal(t, tlogLevel, viper.GetString(conf2.ViperLogLevelKey))
+	assert.Equal(t, tVer, viper.GetString(conf2.ViperBuildVersionKey))
+	assert.Equal(t, tDate, viper.GetString(conf2.ViperBuildDateKey))
+	assert.Equal(t, tServiceName, viper.GetString(conf2.ViperServiceNameKey))
+	assert.Equal(t, conf2.DefaultTraceSampleRate, viper.GetFloat64(conf2.ViperTraceSampleRateKey))
 }
 
 func TestEnvVars(t *testing.T) {
 	defer viper.Reset()
 	const ep = "http://test-host:4317"
-	err := os.Setenv(conf.OtelColletorEPEnv, ep)
+	err := os.Setenv(conf2.OtelColletorEPEnv, ep)
 
 	require.NoError(t, err)
-	defer os.Unsetenv(conf.OtelColletorEPEnv)
+	defer os.Unsetenv(conf2.OtelColletorEPEnv)
 
-	err = os.Setenv(conf.LogLevelEnv, "info")
-	defer os.Unsetenv(conf.LogLevelEnv)
+	err = os.Setenv(conf2.LogLevelEnv, "info")
+	defer os.Unsetenv(conf2.LogLevelEnv)
 
-	conf.Initialize()
+	conf2.Initialize()
 
-	assert.Equal(t, ep, viper.GetString(conf.ViperOtelAddrKey))
-	assert.Equal(t, "info", viper.GetString(conf.ViperLogLevelKey))
+	assert.Equal(t, ep, viper.GetString(conf2.ViperOtelAddrKey))
+	assert.Equal(t, "info", viper.GetString(conf2.ViperLogLevelKey))
 }
 
 func TestShowVersion(t *testing.T) {
@@ -65,7 +64,7 @@ func TestShowVersion(t *testing.T) {
 	os.Stdout = tmpStdout
 
 	os.Args = append(os.Args, "--version")
-	conf.Initialize()
+	conf2.Initialize()
 
 	defer func() {
 		viper.Reset()
@@ -74,9 +73,9 @@ func TestShowVersion(t *testing.T) {
 		os.Remove(tmpStdout.Name())
 	}()
 
-	conf.SetExitFunc(func(code int) {})
+	conf2.SetExitFunc(func(code int) {})
 
-	conf.ShowVersion()
+	conf2.ShowVersion()
 	content, err := os.ReadFile(tmpStdout.Name())
 	require.NoError(t, err)
 	//expected := `version: 0.0.0; build date: 2021-01-01T00:00:00Z; commit: fake`
@@ -91,7 +90,7 @@ func TestShowHelp(t *testing.T) {
 	os.Stdout = tmpStdout
 
 	os.Args = append(os.Args, "--help")
-	conf.Initialize()
+	conf2.Initialize()
 
 	defer func() {
 		viper.Reset()
@@ -100,8 +99,8 @@ func TestShowHelp(t *testing.T) {
 		os.Remove(tmpStdout.Name())
 	}()
 
-	conf.SetExitFunc(func(code int) {})
-	conf.ShowHelp()
+	conf2.SetExitFunc(func(code int) {})
+	conf2.ShowHelp()
 
 	content, err := os.ReadFile(tmpStdout.Name())
 	require.NoError(t, err)

@@ -8,14 +8,13 @@ Gopkg.lock
 go.sum
 
 Makefile
-Dockerfile
+build/Dockerfile
 docker-compose.yaml
 .gitignore
 .dockerignore
 **/*.sh
 **/*.md
 **/*.env
-**/*_test.go
 **/*.out
 **/*.exe
 **/*.dll

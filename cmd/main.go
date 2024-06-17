@@ -1,15 +1,12 @@
 package main
 
 import (
-	"MODULE_NAME/conf"
 	"context"
-
 	"github.com/spf13/viper"
 	"github.com/twistingmercury/telemetry/logging"
-
-	"MODULE_NAME/server"
-
 	"github.com/twistingmercury/utils"
+	"token_go_module/internal/conf"
+	"token_go_module/internal/server"
 )
 
 func main() {

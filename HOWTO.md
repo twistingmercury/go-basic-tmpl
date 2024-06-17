@@ -1,6 +1,6 @@
 # About this template
 
-This is a basic template for creating Go projects with a focus on observability, containerization, and best practices. The template provides a solid foundation for building robust and maintainable Go applications, incorporating essential components such as logging, tracing, metrics, and health monitoring.
+This is a basic template for creating Go projects with a focus on observability, containerization, and best practices. The template provides a solid foundation for building robust and maintainable Go applications, incorporating essential components such as logging, tracing, metrics, and health monitoring. The template attempts to follow to the [Go Standard Layout](https://github.com/golang-standards/project-layout) where practical.
 
 ## Features
 

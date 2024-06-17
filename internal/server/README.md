@@ -75,7 +75,7 @@ func Bootstrap(ctx context.Context) error {
 func Start() {
     // ...
 
-    // Start gRPC server
+    // Start gRPC cmd
     go startGRPCServer()
 
     // Start background worker
@@ -120,6 +120,6 @@ func checkDeps() []heartbeat.DependencyDescriptor {
 
 4. Implement the `HandlerFunc` for each new dependency descriptor to check the health of the respective dependency and return the appropriate `heartbeat.StatusResult`.
    
-5. In all cases, update the unit tests in [server_test.go](./server_test.go). The tests have been stubbed out, but you will need to finish them.
+5. In all cases, update the unit tests in [server_test.go](server_test.go). The tests have been stubbed out, but you will need to finish them.
 
 Remember to also update the README and other relevant documentation to reflect any changes or extensions made to the `server` package.
