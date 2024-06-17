@@ -1,43 +1,41 @@
-# How to use and update the build scripts
 
-This directory contains two shell scripts, `build.sh` and `common.sh`, which are used to build the Docker image for the Go application.
+---
 
-## build.sh
+NOTE: This directory is suggested by [Standard Go Project Layout](https://github.com/golang-standards/project-layout/tree/master).
 
-The `build.sh` script is responsible for building the Docker image for the Go application. It takes several environment variables as input to customize the build process.
+See: [project-layout
+/build/](https://github.com/golang-standards/project-layout/tree/master/build) for a description.
+
+---
+
+# Directory: build
+
+
+
+This directory contains three shell scripts, `build-develop.sh`, `build-release.sh`, and `common.sh`. These are used to build the Docker image for the application. The `build-develop.sh` script is responsible for building a development build Docker image for the Go application. The `build-release.sh` script builds the image intended for release.
 
 ### Usage
 
-To use the `build.sh` script, run the following command:
-
-```
-BUILD_DATE="$(BUILD_DATE)" \
-BUILD_VER="$(BUILD_VER)" \
-DOCKERFILE_DIR="$(PWD)" \
-./_build/build.sh
-```
-
 ### Environment Variables
 
-The following environment variables are used by the `build.sh` script:
+The following environment variables are used by the `build-release.sh` script:
 
-- `BUILD_DATE`: The build date of the binary
 - `BUILD_VER`: The build semantic version (if a release candidate) of the binary
-- `DOCKERFILE_DIR`: The directory containing the target Dockerfile
+
+The `build-develop.sh` doesn't require any environmental variables.
 
 ### Functionality
 
 The `build.sh` script performs the following steps:
 
 1. Sources the `common.sh` script to access shared functions
-2. Checks if the required environment variables are set using the `checkEnv` function from `common.sh`
-3. Changes the current directory to the `DOCKERFILE_DIR`
-4. Builds the Docker image using the provided environment variables and the Dockerfile in the current directory
-5. Prunes the Docker system to remove unused images and containers
+2. Checks if there are any required environment variables using the `checkEnv` function from `common.sh`
+3. Builds the Docker image using any provided environment variables.
+4. Prunes the Docker system to remove unused images and containers.
 
 ## common.sh
 
-The `common.sh` script contains helper functions used by the `build.sh` script.
+The `common.sh` script contains helper functions used by the build scripts.
 
 ### Functions
 
@@ -46,62 +44,46 @@ The `common.sh` script contains helper functions used by the `build.sh` script.
 
 ### Usage
 
-The `common.sh` script is sourced by the `build.sh` script and is not meant to be run directly. Its functions are used to validate environment variables and provide help information.
+The `common.sh` script is sourced by the build scripts and is not meant to be run directly. Its functions are used to validate environment variables and provide help information.
 
 ## Adding Environment Variables
 
 If you need to add additional environment variables to customize the build process, follow these steps:
 
-1. Open the `build.sh` script in a text editor.
+1. Open the `build-[develop | release].sh` script in a text editor.
 
 2. Locate the section where the existing environment variables are checked using the `checkEnv` function, e.g.:
-
-```bash
-common::checkEnv "BUILD_DATE"
-common::checkEnv "BUILD_VER"
-# ...
-```
+   ```bash
+    # In build-release.sh 
+    common::checkEnv "BUILD_VER"
+    # ...
+   ```
 
 3. Add a new line for each environment variable you want to add, following the same format:
-
-```bash
-common::checkEnv "YOUR_NEW_ENV_VAR"
-```
-
-Replace `YOUR_NEW_ENV_VAR` with the name of your new environment variable.
-
+    ```bash
+    common::checkEnv "YOUR_NEW_ENV_VAR"
+    ```
+   
 4. Locate the `docker build` command in the `build.sh` script and add your new environment variable as a build argument:
-
-```bash
-docker build --force-rm \
-  --build-arg BUILD_DATE="$BUILD_DATE" \
-  --build-arg BUILD_VER="$BUILD_VER" \
-  # ...
-  --build-arg YOUR_NEW_ENV_VAR="$YOUR_NEW_ENV_VAR" \
-  -t "devapp":"$BUILD_VER" -f Dockerfile .
-```
-
-Replace `YOUR_NEW_ENV_VAR` with the name of your new environment variable.
+    ```bash
+    docker build --force-rm \
+      --build-arg BUILD_DATE="$BUILD_DATE" \
+      --build-arg BUILD_VER="$BUILD_VER" \
+      # ...
+      --build-arg YOUR_NEW_ENV_VAR="$YOUR_NEW_ENV_VAR" \
+      -t "devapp":"$BUILD_VER" -f Dockerfile .
+    ```
 
 5. Open the `dockerfile` in a text editor and add a corresponding `ARG` for your new environment variable:
+    ```dockerfile
+    ARG YOUR_NEW_ENV_VAR
+    ```
 
-```dockerfile
-ARG YOUR_NEW_ENV_VAR
-```
-
-Replace `YOUR_NEW_ENV_VAR` with the name of your new environment variable. This allows the Dockerfile to accept the value passed from the `build.sh` script.
-
-6. Open the `common.sh` script in a text editor.
-
-7. Locate the `help` function and add a new line to the "Environment variables" section for each new environment variable you added:
-
-```bash
-echo "  YOUR_NEW_ENV_VAR: Description of your new environment variable"
-```
-
-Replace `YOUR_NEW_ENV_VAR` with the name of your new environment variable and provide a brief description of its purpose.
-
-8. Save the changes to `build.sh`, `dockerfile`, and `common.sh`.
+6. Open the `common.sh` script in a text editor. Locate the `help` function and add a new line to the "Environment variables" section for each new environment variable you added:
+    ```bash
+    echo "  YOUR_NEW_ENV_VAR: Description of your new environment variable"
+    ```
+7. Save the changes to `build.sh`, `dockerfile`, and `common.sh`.
 
 Now, when running the `build.sh` script, make sure to provide a value for your new environment variable:
 
