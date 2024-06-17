@@ -4,11 +4,12 @@ This is a basic template for creating Go projects with a focus on observability,
 
 ## Features
 
-- Structured logging using the [zerolog](https://pkg.go.dev/github.com/rs/zerolog) package
-- Tracing with OpenTelemetry and OTLP exporter
-- Metrics collection Prometheus
+- Full logging, distributed tracing, and metrics support using [twistingmercury/telemetry](https://github.com/twistingmercury/telemetry)
+  - Structured logging using the [zerolog](https://pkg.go.dev/github.com/rs/zerolog) package
+  - Tracing using the [opentelemetry-go](https://github.com/open-telemetry/opentelemetry-go) package.
+  - Metrics collection Prometheus using the [client_golang](https://github.com/prometheus/client_golang) package.
 - Configuration management using the [viper](https://pkg.go.dev/github.com/spf13/viper) package
-- Health monitoring with a heartbeat endpoint
+- Health monitoring with a heartbeat endpoint using the [twistingmercury/heartbeat](https://github.com/twistingmercury/heartbeat) package..
 - Dockerfile for containerization
 - Shell scripts for building the application
 - Makefile for common development tasks
