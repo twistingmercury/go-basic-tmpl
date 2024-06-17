@@ -30,4 +30,6 @@ WORKDIR /app
 COPY --from=build /token_go_bin/bin/ /app/
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
+EXPOSE 8181 9090
+
 ENTRYPOINT ["/app/token_go_bin"]
