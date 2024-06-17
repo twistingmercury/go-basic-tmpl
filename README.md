@@ -1,7 +1,7 @@
 
 ---
 
-## ~NOTE: Please refer to the [HOWTO](./HOWTO.md) for guidelines around using this template.~
+#### __NOTE: Please refer to the [HOWTO](./HOWTO.md) for guidelines around using this template.__
 
 ---
 
