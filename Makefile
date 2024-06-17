@@ -5,7 +5,7 @@ default: help
 
 .PHONY: help
 help:
-	@echo "\devapp makefile usage: make [target]"
+	@echo "devapp makefile usage: make [target]"
 	@echo "  Targets:"
 	@echo "  » clean           Remove build artifacts and clean up the project"
 	@echo "  » bin             Build the binary and output to _bin/ directory"
