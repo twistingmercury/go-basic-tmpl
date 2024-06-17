@@ -9,10 +9,10 @@ DATE=$(date +"%Y-%m-%d")
 
 common::checkenv "BUILD_VER"
 
-DOCKER_BUILDKIT=1 docker build --force-rm \
+DOCKER_BUILDKIT=1 docker build --force-rm --no-cache \
 --build-arg BUILD_DATE="$DATE" \
 --build-arg BUILD_VER="$BUILD_VER" \
 -f build/Dockerfile "$PROJ_ROOT" \
--t token_go_bin:"$BUILD_VER"
+-t myapp:"$BUILD_VER"
 
 docker system prune -f
