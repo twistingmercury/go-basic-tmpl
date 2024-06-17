@@ -1,3 +1,10 @@
+
+---
+
+## NOTE: Please refer to the [HOWTO](./HOWTO.md) for guidelines around using this template.
+
+---
+
 # Project token_go_bin
 
 _**TODO**: A brief description of your Go project goes here. Explain what your project does, its purpose, and any key features or benefits. Feel free to customize this template based on your project's specific needs. Add or remove sections as necessary, and provide detailed information to help users understand and use your Go project effectively._
