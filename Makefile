@@ -34,7 +34,7 @@ run: bin
 
 .PHONY:image-dev
 image-dev:
-	BUILD_VER="$(BUILD_VER)" ./build/build-develop.sh
+	./build/build-develop.sh
 
 .PHONY:image-rel
 image-rel:
