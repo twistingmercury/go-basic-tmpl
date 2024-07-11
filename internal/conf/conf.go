@@ -1,10 +1,11 @@
 package conf
 
 import (
+	"context"
 	"fmt"
 	"os"
 
-	"github.com/twistingmercury/telemetry/logging"
+	"github.com/twistingmercury/telemetry/v2/logging"
 
 	"github.com/rs/zerolog"
 	"github.com/spf13/pflag"
@@ -93,7 +94,7 @@ func Initialize() {
 			viper.SetConfigFile(cfile)
 			viper.SetConfigType("toml")
 			if err = viper.ReadInConfig(); err != nil {
-				logging.Fatal(err, "failed to read configuration file")
+				logging.Fatal(context.Background(), err, "failed to read configuration file")
 			}
 		}
 	}
