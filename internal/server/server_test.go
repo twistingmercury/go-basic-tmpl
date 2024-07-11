@@ -3,7 +3,7 @@ package server_test
 import (
 	"context"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/twistingmercury/telemetry/metrics"
+	"github.com/twistingmercury/telemetry/v2/metrics"
 	"io"
 	"net/http"
 	"net/http/httptest"

@@ -16,9 +16,9 @@ import (
 
 	"github.com/rs/zerolog"
 	"github.com/spf13/viper"
-	"github.com/twistingmercury/telemetry/logging"
-	"github.com/twistingmercury/telemetry/metrics"
-	"github.com/twistingmercury/telemetry/tracing"
+	"github.com/twistingmercury/telemetry/v2/logging"
+	"github.com/twistingmercury/telemetry/v2/metrics"
+	"github.com/twistingmercury/telemetry/v2/tracing"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
 )
 
@@ -45,7 +45,7 @@ func Bootstrap(context context.Context, svcName, svcVersion, namespace, environm
 	ctx = context
 
 	// init tracing
-	logging.Info("initializing tracing")
+	logging.Info(ctx, "initializing tracing")
 	texporter, err := otlptracegrpc.New(ctx)
 	if err != nil {
 		return err
@@ -56,7 +56,7 @@ func Bootstrap(context context.Context, svcName, svcVersion, namespace, environm
 	}
 
 	// init metrics
-	logging.Info("initializing metrics")
+	logging.Info(ctx, "initializing metrics")
 	err = metrics.Initialize(context, namespace, svcName)
 	if err != nil {
 		return err
@@ -74,7 +74,7 @@ func Bootstrap(context context.Context, svcName, svcVersion, namespace, environm
 	metrics.Publish()
 	//<---
 
-	logging.Info("starting heartbeat")
+	logging.Info(ctx, "starting heartbeat")
 	StartHeartbeat(ctx)
 
 	return nil
@@ -82,7 +82,7 @@ func Bootstrap(context context.Context, svcName, svcVersion, namespace, environm
 
 // Start initializes the application's API service and starts the cmd.
 func Start() {
-	logging.Info("starting cmd")
+	logging.Info(ctx, "starting cmd")
 
 	// -->
 	// do whatever is required to start the cmd, such as initializing the database, listening
@@ -92,13 +92,13 @@ func Start() {
 	for {
 		select {
 		case <-ctx.Done():
-			logging.Info("stopping cmd")
-			stop()
+			logging.Info(ctx, "stopping cmd")
+			_ = stop()
 			return
 		default:
 			time.Sleep(1 * time.Second)
 			sampleCounter.WithLabelValues("foo", "bar", "bas").Inc()
-			logging.Info("doing some work")
+			logging.Info(ctx, "doing some work")
 		}
 	}
 }
@@ -123,11 +123,11 @@ func StartHeartbeat(ctx context.Context) {
 	hbr.GET("/heartbeat", heartbeat.Handler("BIN_NAME", CheckDeps()...))
 	addr := fmt.Sprintf(":%d", conf.DefaultHeartbeatPort)
 
-	logging.Info("starting heartbeat", logging.KeyValue{Key: "addr", Value: addr})
+	logging.Info(ctx, "starting heartbeat", logging.KeyValue{Key: "addr", Value: addr})
 	hbsvr = &http.Server{Addr: addr, Handler: hbr}
 	go func() {
 		if err := hbsvr.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-			logging.Fatal(err, "heartbeat endpoint failed with error")
+			logging.Fatal(ctx, err, "heartbeat endpoint failed with error")
 		}
 	}()
 }
